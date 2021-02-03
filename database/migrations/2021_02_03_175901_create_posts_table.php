@@ -18,12 +18,11 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->dateTime('publication_date');
-            $table->integer('user_id')->unsigned();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
+            $table->foreignId('user_id')
+            ->constrained()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 
             $table->timestamps();
         });
