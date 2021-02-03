@@ -12,18 +12,28 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_create_a_post()
+    public function test_user_can_create_a_posts()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $this->assertAuthenticated();
-
-        $response = $this->post(route('posts.store'), [
+        $this->actingAs(User::factory()->create()->fresh())
+        ->assertAuthenticated()
+        ->post(route('posts.store'), [
             'title' => 'random title',
             'description' =>  'Lorem Ipsum'
         ]);
         $this->assertDatabaseHas('posts', [
             'title' => 'random title'
+        ]);
+    }
+
+    public function test_guest_cannot_create_a_posts()
+    {
+        $this->assertGuest()
+        ->post(route('posts.store'), [
+            'title' => 'guest title',
+            'description' =>  'Lorem Ipsum'
+        ]);
+        $this->assertDatabaseMissing('posts', [
+            'title' => 'guest title'
         ]);
     }
 }

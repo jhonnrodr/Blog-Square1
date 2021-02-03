@@ -16,7 +16,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::query()
+                ->get();
+        return view('cms.dashboard', compact('posts'));
     }
 
     /**

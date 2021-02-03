@@ -9,6 +9,8 @@ class Post extends Model
 {
     use HasFactory;
 
+    protected $dates = ['publication_date'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,4 +22,10 @@ class Post extends Model
         'publication_date',
         'user_id'
     ];
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id')
+        ->withDefault(['name'=> 'Anonymous']) ;
+    }
 }
