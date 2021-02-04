@@ -19,6 +19,10 @@
     </x-slot>
 
     <div class="py-12">
+        @if(session('success'))
+        <x-alert-success>{{ session('success') }}</x-alert-success>
+        @endif
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 border-b border-gray-200 sm:px-6">

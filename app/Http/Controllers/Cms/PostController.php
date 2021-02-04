@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class PostController extends Controller
  
         $posts = $user->posts()
                     ->select('id', 'title', 'description', 'publication_date')
-                    ->latest('publication_date')
+                    ->orderBy('publication_date', 'desc')
                     ->paginate(10);
 
         return view('cms.dashboard', compact('posts'));
@@ -52,14 +53,14 @@ class PostController extends Controller
     {
         // $validated = $request->validated();
         Post::create([
-            'user_id' => auth()->id(),
-            'title' => $request->title,
-            'description' => $request->description,
-            'slug'  => Str::slug($request->title, "-") .'-'. random_int(2, 1000),
-            'publication_date' => now()
-        ]);
+                'user_id' => auth()->id(),
+                'title' => $request->title,
+                'description' => $request->description,
+                'slug'  => Str::slug($request->title, "-") .'-'. random_int(2, 1000),
+                'publication_date' => now()
+            ]);
 
-        return redirect()->route('posts.index');
+        return back()->with('success', 'Your post has published successfully.');
     }
 
     /**
