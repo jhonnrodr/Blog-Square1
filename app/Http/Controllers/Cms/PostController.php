@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Cms;
 
-use App\Http\Requests\StorePostRequest;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
 {
@@ -16,8 +17,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::query()
-                ->get();
+        $user = Auth::user();
+ 
+        $posts = $user->posts()
+                    ->latest()
+                    ->paginate(10);
+
         return view('cms.dashboard', compact('posts'));
     }
 
@@ -28,7 +33,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('cms.post.create');
     }
 
     /**
@@ -37,7 +42,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         // $validated = $request->validated();
         Post::create([
@@ -47,7 +52,7 @@ class PostController extends Controller
             'publication_date' => now()
         ]);
 
-        return back();
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -58,40 +63,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $post = Post::findOrFail($id);
+        return view('dashboard.show', compact('post'));
     }
 }

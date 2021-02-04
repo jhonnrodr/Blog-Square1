@@ -11,7 +11,7 @@ class SiteController extends Controller
     {
         $posts = Post::query()
                 ->with('author')
-                ->get();
+                ->paginate(5);
         return view('home', compact('posts'));
     }
 }
