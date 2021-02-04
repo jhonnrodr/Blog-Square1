@@ -7,6 +7,6 @@ use App\Http\Controllers\Cms\PostController;
 use App\Http\Controllers\Cms\IndexController;
 
 Route::get('/', [SiteController::class, 'index'])->name('home');
-Route::resource('posts', PostController::class)->middleware(['auth']);
+Route::resource('posts', PostController::class);
 
 require __DIR__.'/auth.php';

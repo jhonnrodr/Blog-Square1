@@ -10,6 +10,10 @@ use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except'=>'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -59,12 +63,17 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $post = Post::findOrFail($id);
-        return view('dashboard.show', compact('post'));
+        $post = Post::query()
+                ->select('id', 'title', 'description', 'publication_date', 'user_id')
+                ->with('author:id,name')
+                ->where('slug', $slug)
+                ->first();
+
+        return view('post', compact('post'));
     }
 }

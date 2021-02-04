@@ -20,7 +20,8 @@ class Post extends Model
         'title',
         'description',
         'publication_date',
-        'user_id'
+        'user_id',
+        'slug',
     ];
 
     public function author()
