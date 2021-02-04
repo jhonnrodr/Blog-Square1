@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\AutoPostImportJob;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class SiteController extends Controller
 {
