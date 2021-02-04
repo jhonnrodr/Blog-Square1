@@ -20,7 +20,8 @@ class PostController extends Controller
         $user = Auth::user();
  
         $posts = $user->posts()
-                    ->latest()
+                    ->select('id', 'title', 'description', 'publication_date')
+                    ->latest('publication_date')
                     ->paginate(10);
 
         return view('cms.dashboard', compact('posts'));

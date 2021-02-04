@@ -10,8 +10,10 @@ class SiteController extends Controller
     public function index()
     {
         $posts = Post::query()
-                ->with('author')
-                ->paginate(5);
+                ->select('id', 'title', 'description', 'user_id', 'publication_date')
+                ->with('author:id,name')
+                ->latest('publication_date')
+                ->paginate(10);
         return view('home', compact('posts'));
     }
 }
