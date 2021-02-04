@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -54,6 +55,7 @@ class PostController extends Controller
             'user_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
+            'slug'  => Str::slug($request->title, "-") .'-'. random_int(2, 1000),
             'publication_date' => now()
         ]);
 
