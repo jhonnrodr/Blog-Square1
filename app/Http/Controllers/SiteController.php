@@ -9,7 +9,16 @@ use Illuminate\Support\Facades\Artisan;
 
 class SiteController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Displays the home page.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\View\View
+     *
+     *  @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function index(Request $request): View
     {
         $order_by = $request->get('orderby', 'desc');
         $posts = Post::query()

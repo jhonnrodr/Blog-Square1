@@ -42,11 +42,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the posts of an user.
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts()
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
+    /**
+     * Get the user with admin privileges.
+     *
+     * @var array
+     */
     public function scopeAdminUser($query)
     {
         return $query->where('role', 'admin')->first();

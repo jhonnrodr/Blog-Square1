@@ -22,7 +22,9 @@ class AutoPostImportJob implements ShouldQueue
      * @var \App\Models\User
      */
     private $user;
-
+    /**
+     * @var string
+     */
     private $url;
 
     /**
@@ -41,7 +43,7 @@ class AutoPostImportJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle():void
     {
         $client = new Client();
         $response = $client->request('GET', $this->url, [

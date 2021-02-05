@@ -24,6 +24,11 @@ class Post extends Model
         'slug',
     ];
 
+    /**
+     * Get the authour of the post
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id')

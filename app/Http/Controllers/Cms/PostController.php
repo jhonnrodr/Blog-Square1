@@ -12,14 +12,19 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    /**
+     * PostController constructor.
+     *
+     */
     public function __construct()
     {
         $this->middleware('auth', ['except'=>'show']);
     }
+
     /**
-     * Display a listing of the resource.
+     * Displays the manage post page.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
