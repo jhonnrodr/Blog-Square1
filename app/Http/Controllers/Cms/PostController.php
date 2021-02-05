@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Repositories\PostRepository;
+use Illuminate\Support\Arr;
 
 class PostController extends Controller
 {
@@ -58,7 +59,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $this->postRepository->create($request);
+        $this->postRepository->createPost(Auth::user()->id, Arr::add($request->validated(), 'publication_date', now()));
 
         return back()->with('success', 'Your post has published successfully.');
     }

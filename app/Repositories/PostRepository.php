@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 /**
  * Class EloquentProjectRepository.
@@ -51,14 +52,14 @@ class PostRepository implements PostRepositoryInterface
     /**
     * {@inheritdoc}
     */
-    public function create($params)
+    public function createPost(int $userId, array $params)
     {
         return $this->model->create([
-            'user_id' => auth()->id(),
-            'title' => $params->title,
-            'description' => $params->description,
-            'slug'  => Str::slug($params->title, "-") .'-'. random_int(2, 1000),
-            'publication_date' => now()
+            'user_id' => $userId,
+            'title' => Arr::get($params, 'title'),
+            'description' => Arr::get($params, 'description'),
+            'slug'  => Str::slug(Arr::get($params, 'title'), "-") .'-'. random_int(2, 1000),
+            'publication_date' => Arr::get($params, 'publication_date')
         ]);
     }
 

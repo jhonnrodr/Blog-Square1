@@ -18,15 +18,6 @@ interface RepositoryInterface
     public function getAll($query);
 
     /**
-     * Create a new project from the CMS form.
-     *
-     * @param array $params
-     *
-     * @return \App\Models\Post;
-     */
-    public function create(array  $data);
-
-    /**
      * Search Post by Id
      *
      * @param array $params

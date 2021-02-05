@@ -27,7 +27,7 @@ interface PostRepositoryInterface extends RepositoryInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public function create($params);
+    public function createPost(int $userId, array $params);
 
     /**
      * Search Post by Slug

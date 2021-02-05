@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Post;
 use Exception;
 use App\Models\User;
+use App\Repositories\PostRepository;
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
@@ -51,12 +52,10 @@ class AutoPostImportJob implements ShouldQueue
         ]);
         $posts = collect(json_decode($response->getBody())->data);
         $posts->map(function ($post) {
-            Post::create([
+            app()->make(PostRepository::class)->createPost($this->user->id, [
                 'title'           => $post->title,
                 'description'     => $post->description,
-                'publication_date' => $post->publication_date,
-                'slug'            => Str::slug($post->title, "-") .'-'. random_int(2, 1000),
-                'user_id'         => $this->user->id
+                'publication_date' => $post->publication_date
             ]);
         });
     }
