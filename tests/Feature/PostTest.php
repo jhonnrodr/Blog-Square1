@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Post;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\User;
+use App\Jobs\AutoPostImportJob;
+use Artisan;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan as FacadesArtisan;
 
 class PostTest extends TestCase
 {
@@ -70,5 +73,14 @@ class PostTest extends TestCase
 
         $response = $this->actingAs($user2)->get('/posts');
         $response->assertDontSee('random title');
+    }
+
+    public function test_see_if_auto_post_import_executed()
+    {
+        Queue::fake();
+
+        Artisan::call('cron:auto-post-import');
+
+        Queue::assertPushed(AutoPostImportJob::class);
     }
 }

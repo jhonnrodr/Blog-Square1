@@ -68,5 +68,6 @@ class AutoPostImportJob implements ShouldQueue
      */
     public function failed(Exception $exception)
     {
+        throw new \Exception("Error Processing the job", 1);
     }
 }
