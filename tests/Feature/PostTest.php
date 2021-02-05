@@ -15,7 +15,10 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_create_a_posts()
+    /**
+     * Test user can create a post
+     */
+    public function test_user_can_create_a_posts(): void
     {
         $this->actingAs(User::factory()->create()->fresh())
         ->assertAuthenticated()
@@ -28,7 +31,10 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function test_guest_cannot_create_a_posts()
+    /**
+     * Test unregistered user cannot create a post
+     */
+    public function test_guest_cannot_create_a_posts(): void
     {
         $this->assertGuest()
         ->post(route('posts.store'), [
@@ -40,7 +46,10 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function test_user_can_see_his_post()
+    /**
+     * Test user can see his/her own post
+     */
+    public function test_user_can_see_his_post(): void
     {
         $user = User::factory()->create()->fresh();
         
@@ -53,7 +62,10 @@ class PostTest extends TestCase
         $response->assertSee('random title');
     }
 
-    public function test_user_cannot_see_posts_from_other_user_in_the_dashboard()
+    /**
+     * Test user cannot see posts from other users
+     */
+    public function test_user_cannot_see_posts_from_other_user_in_the_dashboard(): void
     {
         $user1 = User::factory()->create()->fresh();
         $user2 = User::factory()->create()->fresh();
@@ -75,7 +87,10 @@ class PostTest extends TestCase
         $response->assertDontSee('random title');
     }
 
-    public function test_see_if_auto_post_import_executed()
+    /**
+     * Test AutoPostImporter job
+     */
+    public function test_see_if_auto_post_import_executed(): void
     {
         Queue::fake();
 

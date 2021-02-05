@@ -12,26 +12,38 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_guest_can_see_the_blog()
+    /**
+     * Test guest can see the blog homepage
+     */
+    public function test_guest_can_see_the_blog(): void
     {
         $this->assertGuest()
         ->get('/')->assertSee('Home');
     }
 
-    public function test_guest_cannot_see_the_dashboard()
+    /**
+     * Test unauthenticated user cannot see the dashboard
+     */
+    public function test_guest_cannot_see_the_dashboard(): void
     {
         $this->assertGuest()
         ->get('/posts')
         ->assertRedirect('/login');
     }
 
-    public function test_user_can_see_the_dashboard()
+    /**
+     * Test authenticated user can see dashboard
+     */
+    public function test_user_can_see_the_dashboard(): void
     {
         $this->actingAs(User::factory()->create()->fresh())->get('/posts')
         ->assertSee('Manage Posts');
     }
 
-    public function test_guest_can_register()
+    /**
+     * Test guest can regiter/signup
+     */
+    public function test_guest_can_register(): void
     {
         $response = $this->post('/register', [
             'name' => 'Test User',

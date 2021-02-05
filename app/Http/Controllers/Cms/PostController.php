@@ -8,32 +8,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
-use Illuminate\Support\Str;
+use App\Repositories\PostRepository;
 
 class PostController extends Controller
 {
+
+    /**
+     * @var \App\Repositories\PostRepository
+     */
+    private $postRepository;
+
     /**
      * PostController constructor.
      *
      */
-    public function __construct()
+    public function __construct(PostRepository $postRepository)
     {
         $this->middleware('auth', ['except'=>'show']);
+        $this->postRepository = $postRepository;
     }
 
     /**
-     * Displays the manage post page.
+     * Displays the manage posts page.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $user = Auth::user();
- 
-        $posts = $user->posts()
-                    ->select('id', 'title', 'description', 'publication_date')
-                    ->orderBy('publication_date', 'desc')
-                    ->paginate(10);
+        $posts = $this->postRepository->getByAuthor(Auth::user());
 
         return view('cms.dashboard', compact('posts'));
     }
@@ -56,14 +58,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        // $validated = $request->validated();
-        Post::create([
-                'user_id' => auth()->id(),
-                'title' => $request->title,
-                'description' => $request->description,
-                'slug'  => Str::slug($request->title, "-") .'-'. random_int(2, 1000),
-                'publication_date' => now()
-            ]);
+        $this->postRepository->create($request);
 
         return back()->with('success', 'Your post has published successfully.');
     }
@@ -76,12 +71,8 @@ class PostController extends Controller
      */
     public function show($slug)
     {
-        $post = Post::query()
-                ->select('id', 'title', 'description', 'publication_date', 'user_id')
-                ->with('author:id,name')
-                ->where('slug', $slug)
-                ->first();
-
+        $post = $this->postRepository->findBySlug($slug);
+        
         return view('post', compact('post'));
     }
 }
