@@ -24,7 +24,7 @@ git clone git@github.com:jhonnrodr/Blog-Square1.git
 cd Blog-Square1
 ```
 
-The install dependencies using composer:
+For install dependencies using composer:
 
 ```
 composer install
@@ -61,7 +61,7 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-## Configuration Auto-Post Import
+## Configurate Auto-Post Import
 
 ```
 php artisan schedule:work
@@ -80,4 +80,11 @@ Using Admin credentials
 ```
 email: admin@blog.com
 password: admin
+```
+
+Example credentials
+
+```
+email: test@blog.com
+password: password
 ```
