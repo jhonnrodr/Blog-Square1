@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use App\Repositories\Interfaces\PostRepositoryInterface;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
@@ -69,7 +69,7 @@ class PostRepository implements PostRepositoryInterface
     public function find($id)
     {
         if (null == $post = $this->model->findOrFail($id)) {
-            // throw new \ModelNotFoundException("Post not found");
+            throw new ModelNotFoundException("Post not found");
         }
 
         return $post;
@@ -80,10 +80,13 @@ class PostRepository implements PostRepositoryInterface
     */
     public function findBySlug($slug)
     {
-        return  $this->model->newQuery()
-                    ->select('id', 'title', 'description', 'publication_date', 'user_id')
-                    ->with('author:id,name')
-                    ->where('slug', $slug)
-                    ->first();
+        if (null == $post = $this->model->newQuery()
+            ->select('id', 'title', 'description', 'publication_date', 'user_id')
+            ->with('author:id,name')
+            ->where('slug', $slug)
+            ->first()) {
+            throw new ModelNotFoundException("Post not found");
+        }
+        return $post;
     }
 }

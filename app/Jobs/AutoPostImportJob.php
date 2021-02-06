@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Post;
 use Exception;
+use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use GuzzleHttp\Client;
