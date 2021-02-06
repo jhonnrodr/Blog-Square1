@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class AutoPostImportJob implements ShouldQueue
 {
@@ -46,18 +47,23 @@ class AutoPostImportJob implements ShouldQueue
      */
     public function handle():void
     {
-        $client = new Client();
-        $response = $client->request('GET', $this->url, [
+        try {
+            $client = new Client();
+            $response = $client->request('GET', $this->url, [
             'verify'  => false,
         ]);
-        $posts = collect(json_decode($response->getBody())->data);
-        $posts->map(function ($post) {
-            app()->make(PostRepository::class)->createPost($this->user->id, [
+            $posts = collect(json_decode($response->getBody())->data);
+            $posts->map(function ($post) {
+                app()->make(PostRepository::class)->createPost($this->user->id, [
                 'title'           => $post->title,
                 'description'     => $post->description,
                 'publication_date' => $post->publication_date
             ]);
-        });
+            });
+        } catch (Exception $e) {
+            Log::error('Error with the Blog API: '.config('blog.url'));
+            Log::error($e);
+        }
     }
 
     /**
